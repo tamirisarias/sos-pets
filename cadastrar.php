@@ -1,3 +1,13 @@
+<?php require('Core/Constant.php'); ?>
+<?php require('Core/Util.php'); ?>
+<?php require('Core/WException.php'); ?>
+<?php require('Core/Response.php'); ?>
+<?php require('Core/Transaction.php'); ?>
+<?php require('Core/Model/Session.php'); ?>
+<?php require('Core/Model/Register.php'); ?>
+<?php require('Core/Controller/Main.php'); ?>
+<?php require('Core/Controller/Session.php'); ?>
+<?php require('Core/Controller/Register.php'); ?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -31,24 +41,55 @@
                             <a href="buscar.php">Buscar</a>
                         </li>
                         <li class="active">
+                            <?php if (!empty($_SESSION['user'])) { ?>
+                            <a href="meus-pets.php"><i>Meus Pets</i></a>
+                            <?php } else { ?>
                             <a href="cadastrar.php">Cadastrar</a>
+                            <?php } ?>
                         </li>
                         <li>
                             <a href="denunciar.php">Denunciar</a>
                         </li>
                     </ul>
-                    <form class="navbar-form navbar-right">
+                    <?php if (!empty($_SESSION['user'])) { ?>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a>Bem vindo(a) <u><?php print $_SESSION['user']['nome']; ?></u></a>
+                            </li>
+                            <li>
+                                <a href="index.php?logout=1">
+                                    <span class="glyphicon glyphicon-log-out"></span> Logout
+                                </a>
+                            </li>
+                        </u>
+                    <?php } else { ?>
+                    <form class="navbar-form navbar-right" method="POST" action="index.php">
+                        <input name="type" value="form-login" type="hidden">
                         <div class="form-group">
-                            <input type="text" placeholder="Email" class="form-control">
+                            <input name="email" type="text" placeholder="Email" class="form-control">
                         </div>
                         <div class="form-group">
-                            <input type="password" placeholder="Senha" class="form-control">
+                            <input name="senha" type="password" placeholder="Senha" class="form-control">
                         </div>
                         <button type="submit" class="btn btn-default">Login</button>
                     </form>
+                    <?php } ?>
                 </div>
             </div>
         </nav>
+        <?php $flash_message_list = $response->getFlashMessage(); if (!empty($flash_message_list)) { ?>
+        <div class="container">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="alert alert-danger" role="alert">
+                        <?php foreach ($flash_message_list as $flash_message) { ?>
+                        <p><?php print $flash_message; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
         <div class="container">
             <ol class="breadcrumb">
                 <li>
@@ -58,17 +99,18 @@
             </ol>
             <div class="row">
                 <div class="col-md-6">
-                    <form class="form">
+                    <form class="form" method="POST" action="cadastrar.php">
+                        <input name="type" value="form-login" type="hidden">
                         <div class="panel panel-default">
                             <div class="panel-heading">Ja sou cadastrado!</div>
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <label for="exampleInputName2">Email</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+                                    <label for="login_input_email">Email</label>
+                                    <input type="text" name="email" class="form-control" id="login_input_email" placeholder="Email">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputName2">Senha</label>
-                                    <input type="password" class="form-control" id="exampleInputEmail1" placeholder="Senha">
+                                    <label for="login_input_senha">Senha</label>
+                                    <input type="password" name="senha" class="form-control" id="login_input_senha" placeholder="Senha">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Acessar</button>
                             </div>
@@ -76,23 +118,31 @@
                     </form>
                 </div>
                 <div class="col-md-6">
-                    <form class="form">
+                    <form class="form" method="POST" action="cadastrar.php">
+                        <input name="type" value="form-register" type="hidden">
                         <div class="panel panel-default">
                             <div class="panel-heading">Quero me cadastrar!</div>
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail2">Nome do tutor</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Nome do tutor">
+                                    <label for="register_input_nome">* Nome do tutor</label>
+                                    <input type="text" name="nome" class="form-control" id="register_input_nome" placeholder="Nome do tutor">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail2">Email</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+                                    <label for="register_input_email">* Email</label>
+                                    <input type="text" name="email" class="form-control" id="register_input_email" placeholder="Email">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail2">Telefone</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Telefone">
+                                    <label for="register_input_senha">* Senha</label>
+                                    <input type="password" name="senha" class="form-control" id="register_input_senha" placeholder="Senha">
+                                </div>
+                                <div class="form-group">
+                                    <label for="register_input_telefone">Telefone</label>
+                                    <input type="text" name="telefone" class="form-control" id="register_input_telefone" placeholder="Telefone">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Cadastrar</button>
+                            </div>
+                            <div class="panel-footer">
+                                Campos com (*) são de preenchimento obrigatório.
                             </div>
                         </div>
                     </form>

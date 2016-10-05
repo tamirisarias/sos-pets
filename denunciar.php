@@ -1,3 +1,13 @@
+<?php require('Core/Constant.php'); ?>
+<?php require('Core/Util.php'); ?>
+<?php require('Core/WException.php'); ?>
+<?php require('Core/Response.php'); ?>
+<?php require('Core/Transaction.php'); ?>
+<?php require('Core/Model/Session.php'); ?>
+<?php require('Core/Model/Register.php'); ?>
+<?php require('Core/Controller/Main.php'); ?>
+<?php require('Core/Controller/Session.php'); ?>
+<?php require('Core/Controller/Register.php'); ?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -31,24 +41,55 @@
                             <a href="buscar.php">Buscar</a>
                         </li>
                         <li>
+                            <?php if (!empty($_SESSION['user'])) { ?>
+                            <a href="meus-pets.php"><i>Meus Pets</i></a>
+                            <?php } else { ?>
                             <a href="cadastrar.php">Cadastrar</a>
+                            <?php } ?>
                         </li>
                         <li class="active">
                             <a href="denunciar.php">Denunciar</a>
                         </li>
                     </ul>
-                    <form class="navbar-form navbar-right">
+                    <?php if (!empty($_SESSION['user'])) { ?>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a>Bem vindo(a) <u><?php print $_SESSION['user']['nome']; ?></u></a>
+                            </li>
+                            <li>
+                                <a href="index.php?logout=1">
+                                    <span class="glyphicon glyphicon-log-out"></span> Logout
+                                </a>
+                            </li>
+                        </u>
+                    <?php } else { ?>
+                    <form class="navbar-form navbar-right" method="POST" action="index.php">
+                        <input name="type" value="form-login" type="hidden">
                         <div class="form-group">
-                            <input type="text" placeholder="Email" class="form-control">
+                            <input name="email" type="text" placeholder="Email" class="form-control">
                         </div>
                         <div class="form-group">
-                            <input type="password" placeholder="Senha" class="form-control">
+                            <input name="senha" type="password" placeholder="Senha" class="form-control">
                         </div>
                         <button type="submit" class="btn btn-default">Login</button>
                     </form>
+                    <?php } ?>
                 </div>
             </div>
         </nav>
+        <?php $flash_message_list = $response->getFlashMessage(); if (!empty($flash_message_list)) { ?>
+        <div class="container">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="alert alert-danger" role="alert">
+                        <?php foreach ($flash_message_list as $flash_message) { ?>
+                        <p><?php print $flash_message; ?></p>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
         <div class="container">
             <ol class="breadcrumb">
                 <li>
@@ -58,24 +99,32 @@
             </ol>
             <div class="col-md-12">
                 <div class="row">
-                    <form class="form">
+                    <form class="form" method="POST" action="denunciar.php">
+                        <input name="type" value="form-complaint" type="hidden">
                         <div class="panel panel-default">
                             <div class="panel-heading">Preencha todos os campos corretamente, os dados serão analisados e se denuncia for válida, encaminharemos para as autoridades.</div>
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail2">Nome para contato</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Nome para contato">
+                                    <label for="complaint_nome">Nome para contato</label>
+                                    <input name="nome" type="text" class="form-control" id="complaint_nome" placeholder="Nome para contato">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputName2">* Descreva a situação do animal</label>
-                                    <textarea class="form-control" rows="10">Encontrei um pet abandonado por seu dono...</textarea>
+                                    <label for="complaint_email">* Email</label>
+                                    <input name="email" type="text" class="form-control" id="complaint_email" placeholder="Email">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">* Carregar imagem</label>
-                                    <input type="file" id="exampleInputFile">
-                                    <p class="help-block">Envie uma imagem para termos mais detalhes em relação a situação do animal.<p>
+                                    <label for="complaint_descricao">* Descreva a situação do animal</label>
+                                    <textarea name="descricao" class="form-control" id="complaint_descricao" rows="10">Encontrei um pet abandonado pelo dono...</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="complaint_foto">* Carregar imagem</label>
+                                    <input name="foto" type="file" id="complaint_foto">
+                                    <p class="help-block">Envie uma imagem para termos mais detalhes em relação a situação do animal. Tipos suportados .JPG e .PNG<p>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Enviar</button>
+                            </div>
+                            <div class="panel-footer">
+                                Campos com (*) são de preenchimento obrigatório.
                             </div>
                         </div>
                     </form>
