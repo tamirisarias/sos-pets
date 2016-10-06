@@ -311,6 +311,101 @@ Class PetRegister extends WException {
         return $result;
     }
     /**
+     * retorna uma lista de registros filtrados
+     */
+    public function search() {
+        $user_id = $this->getUserId();
+        $city_id = $this->getCityId();
+        $tipo = $this->getTipo();
+        $raca = $this->getRaca();
+        $porte = $this->getPorte();
+
+        $sql_where = [];
+        $sql_value_list = [$user_id];
+
+        if (!empty($city_id)) {
+            $sql_where[] = 'city_id=?';
+            $sql_value_list[] = $city_id;
+        }
+
+        if (!empty($tipo)) {
+            $sql_where[] = 'tipo=?';
+            $sql_value_list[] = $tipo;
+        }
+
+        if (!empty($raca)) {
+            $sql_where[] = 'raca=?';
+            $sql_value_list[] = $raca;
+        }
+
+        if (!empty($porte)) {
+            $sql_where[] = 'porte=?';
+            $sql_value_list[] = $porte;
+        }
+
+        if (empty($sql_where)) {
+            $sql_where = '';
+
+        } else {
+            $sql_where = vsprintf('and %s',[implode(' and ',$sql_where)]);
+        }
+
+        $sql = vsprintf("select * from pet where user_id = ? %s order by id desc",[$sql_where,]);
+
+        $transaction = $this->getTransaction();
+        $transaction->connect();
+        $resource = $transaction->getResource();
+
+        try {
+            $resource_prepare = $resource->prepare($sql);
+
+            $transaction_resource_error_info = $resource->errorInfo();
+
+            if ($transaction_resource_error_info[0] != '00000') {
+                return false;
+            }
+
+            $resource_prepare->execute($sql_value_list);
+            $result = $resource_prepare->fetchAll(PDO::FETCH_OBJ);
+
+        } catch (PDOException $error) {
+            return false;
+
+        } catch (Exception $error) {
+            return false;
+        }
+
+        if (!empty($result)) {
+            foreach ($result as $key => $item) {
+                $this->setId($item->id);
+                $photo = $this->photoListing();
+
+                $result[$key]->photo = $photo;
+
+                $this->setCityId($item->city_id);
+                $city = $this->cityGet();
+
+                $result[$key]->city = $city;
+
+                if ($item->tipo == '1') {
+                    $result[$key]->tipo_label = 'Cão';
+
+                } else {
+                    $result[$key]->tipo_label = 'Gato';
+                }
+
+                if ($item->porte == '1') {
+                    $result[$key]->porte_label = 'Filhote';
+
+                } else {
+                    $result[$key]->porte_label = 'Adulto';
+                }
+            }
+        }
+
+        return $result;
+    }
+    /**
      * salva um novo registro
      */
     public function photoSave($name,$path,$default = 0,Transaction $transaction = null) {
@@ -381,7 +476,6 @@ Class PetRegister extends WException {
             $transaction_resource_error_info = $resource->errorInfo();
 
             if ($transaction_resource_error_info[0] != '00000') {
-                print_r($transaction_resource_error_info);
                 $this->setError(vsprintf('Erro no cadastro da foto "%s"!',[$name,]));
 
                 $transaction->rollBack();
@@ -409,7 +503,6 @@ Class PetRegister extends WException {
         $pdo_query_error_info = $resource_prepare->errorInfo();
 
         if ($pdo_query_error_info[0] != '00000') {
-            print_r($pdo_query_error_info);
             $this->setError(vsprintf('Erro no cadastro da foto "%s"!',[$name,]));
 
             $transaction->rollBack();

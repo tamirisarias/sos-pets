@@ -13,6 +13,9 @@ $pet->dataatualizacao = null;
 $pet->datacriacao = null;
 
 $pet_photo = [];
+$pet_register_search = [];
+
+$flag_my_pet_search = false;
 
 if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
     if (isset($_REQUEST['delete']) && !empty($_REQUEST['delete'])) {
@@ -83,5 +86,31 @@ if (!empty($_POST) && isset($_POST['type']) && ($_POST['type'] == 'form-pet-regi
 
             exit();
         }
+    }
+}
+
+if (!empty($_GET) && isset($_GET['type']) && ($_GET['type'] == 'form-my-pet-search')) {
+    $request_city_id = Util::get($_GET,'city_id',null);
+    $request_tipo = Util::get($_GET,'tipo',null);
+    $request_raca = Util::get($_GET,'raca',null);
+    $request_porte = Util::get($_GET,'porte',null);
+
+    $flag_my_pet_search = true;
+
+    $pet_register->setResponse($response);
+    $pet_register->setUserId($_SESSION['user']['id']);
+    $pet_register->setCityId($request_city_id);
+    $pet_register->setTipo($request_tipo);
+    $pet_register->setRaca($request_raca);
+    $pet_register->setPorte($request_porte);
+    $pet_register_search = $pet_register->search();
+
+    $error_list = $pet_register->getError();
+
+    if (!empty($error_list)) {
+        foreach ($error_list as $error) {
+            $response->setFlashMessage($error);
+        }
+
     }
 }

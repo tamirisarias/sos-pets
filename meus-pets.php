@@ -111,36 +111,37 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                 <div class="panel-body">
                     <div class="col-md-12">
                         <div class="row">
-                            <form class="form-inline">
+                            <form class="form-inline" method="GET" action="meus-pets.php">
+                                <input name="type" type="hidden" value="form-my-pet-search">
                                 <div class="form-group">
-                                    <label for="exampleInputName2">Tipo</label>
-                                    <select class="form-control">
-                                        <option>--- selecione ---</option>
-                                        <option>Cão</option>
-                                        <option>Gato</option>
+                                    <label for="my_pet_input_type">Tipo</label>
+                                    <select name="tipo" class="form-control" id="my_pet_input_type">
+                                        <option value="">--- selecione ---</option>
+                                        <option value="1" <?php if (!empty($flag_my_pet_search)) { if ($request_tipo == '1') { ?>selected="selected"<?php } } ?>>Cão</option>
+                                        <option value="2" <?php if (!empty($flag_my_pet_search)) { if ($request_tipo == '2') { ?>selected="selected"<?php } } ?>>Gato</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail2">Porte</label>
-                                    <select class="form-control">
-                                        <option>--- selecione ---</option>
-                                        <option>Filhote</option>
-                                        <option>Adulto</option>
+                                    <label for="my_pet_input_porte">Porte</label>
+                                    <select name="porte" class="form-control" id="my_pet_input_porte">
+                                        <option value="">--- selecione ---</option>
+                                        <option value="1" <?php if (!empty($flag_my_pet_search)) { if ($request_porte == '1') { ?>selected="selected"<?php } } ?>>Filhote</option>
+                                        <option value="2" <?php if (!empty($flag_my_pet_search)) { if ($request_porte == '2') { ?>selected="selected"<?php } } ?>>Adulto</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail2">Raça</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Raça">
+                                    <label for="my_pet_input_raca">Raça</label>
+                                    <input name="raca" type="text" value="<?php if (!empty($flag_my_pet_search)) { print $request_raca; } ?>" class="form-control" id="my_pet_input_raca" placeholder="Raça">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail2">Cidade</label>
-                                    <select class="form-control" name="cidade" id="my_pet_input_city">
-                                        <option value="0">--- Selecione ---</option>
+                                    <label for="my_pet_input_city">Cidade</label>
+                                    <select class="form-control" name="city_id" id="my_pet_input_city">
+                                        <option value="">--- Selecione ---</option>
                                         <?php if (!empty($_SESSION) && isset($_SESSION['city']) && !empty($_SESSION['city'])) { ?>
                                         <?php foreach ($_SESSION['city'] as $state => $city_list) { ?>
                                         <optgroup label="<?php print $state; ?>">
                                         <?php foreach ($city_list as $city) { ?>
-                                        <option value="<?php print $city->id; ?>"><?php print utf8_encode($city->nome); ?></option>
+                                        <option value="<?php print $city->id; ?>" <?php if (!empty($flag_my_pet_search)) { if ($request_city_id == $city->id) { ?>selected="selected"<?php } } ?>><?php print utf8_encode($city->nome); ?></option>
                                         <?php } ?>
                                         </optgroup>
                                         <?php } ?>
@@ -182,12 +183,20 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php if (!empty($flag_my_pet_search)) { ?>
+                                    <?php $pet_register_listing = $pet_register_search; ?>
+                                    <?php } else { ?>
                                     <?php $pet_register->setUserId($_SESSION['user']['id']); ?>
                                     <?php $pet_register_listing = $pet_register->listing(); ?>
+                                    <?php } ?>
                                     <?php if (empty($pet_register_listing)) { ?>
                                     <tr>
                                         <td colspan="8">
+                                            <?php if (!empty($flag_my_pet_search)) { ?>
+                                            <p class="text-center">Nenhum Pet encontrado para sua consulta!</p>
+                                            <?php } else { ?>
                                             <p class="text-center">Não há Pets cadastrados!</p>
+                                            <?php } ?>
                                         </td>
                                     </tr>
                                     <?php } ?>
