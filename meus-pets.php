@@ -136,12 +136,14 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                                     <label for="exampleInputEmail2">Cidade</label>
                                     <select class="form-control" name="cidade" id="my_pet_input_city">
                                         <option value="0">--- Selecione ---</option>
+                                        <?php if (!empty($_SESSION) && isset($_SESSION['city']) && !empty($_SESSION['city'])) { ?>
                                         <?php foreach ($_SESSION['city'] as $state => $city_list) { ?>
                                         <optgroup label="<?php print $state; ?>">
                                         <?php foreach ($city_list as $city) { ?>
                                         <option value="<?php print $city->id; ?>"><?php print utf8_encode($city->nome); ?></option>
                                         <?php } ?>
                                         </optgroup>
+                                        <?php } ?>
                                         <?php } ?>
                                     </select>
                                 </div>

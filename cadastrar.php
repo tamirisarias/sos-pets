@@ -12,7 +12,7 @@
 <?php require('Core/Controller/PetRegister.php'); ?>
 <?php
 
-if (!empty($_SESSION) || isset($_SESSION['user']) || !empty($_SESSION['user'])) {
+if (!empty($_SESSION) && isset($_SESSION['user']) && !empty($_SESSION['user'])) {
     $response->httpRedirect('meus-pets.php');
 }
 
