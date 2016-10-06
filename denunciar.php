@@ -5,9 +5,11 @@
 <?php require('Core/Transaction.php'); ?>
 <?php require('Core/Model/Session.php'); ?>
 <?php require('Core/Model/Register.php'); ?>
+<?php require('Core/Model/PetRegister.php'); ?>
 <?php require('Core/Controller/Main.php'); ?>
 <?php require('Core/Controller/Session.php'); ?>
 <?php require('Core/Controller/Register.php'); ?>
+<?php require('Core/Controller/PetRegister.php'); ?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -18,6 +20,7 @@
         <meta name="author" content="tamiris arias">
         <title>SOS Pets</title>
         <link href="../public/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../public/css/ekko-lightbox.min.css" rel="stylesheet">
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -142,5 +145,7 @@
         </div>
         <script src="../public/js/jquery-3.1.1.min.js"></script>
         <script src="../public/js/bootstrap.min.js"></script>
+        <script src="../public/js/ekko-lightbox.min.js"></script>
+        <script src="../public/js/main.js"></script>
     </body>
 </html>

@@ -5,9 +5,11 @@
 <?php require('Core/Transaction.php'); ?>
 <?php require('Core/Model/Session.php'); ?>
 <?php require('Core/Model/Register.php'); ?>
+<?php require('Core/Model/PetRegister.php'); ?>
 <?php require('Core/Controller/Main.php'); ?>
 <?php require('Core/Controller/Session.php'); ?>
 <?php require('Core/Controller/Register.php'); ?>
+<?php require('Core/Controller/PetRegister.php'); ?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -18,6 +20,7 @@
         <meta name="author" content="tamiris arias">
         <title>SOS Pets</title>
         <link href="../public/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../public/css/ekko-lightbox.min.css" rel="stylesheet">
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -93,7 +96,7 @@
         <div class="container">
             <div class="col-md-12">
                 <div class="row">
-                    <img src="../public/img/pet-logo-1.jpg"  alt="SOS Pets" class="img-rounded" style="width:1140px;height:530px">
+                    <img src="../public/img/site/pet-logo-1.jpg"  alt="SOS Pets" class="img-rounded" style="width:1140px;height:530px">
                 </div>
             </div>
             <div style="width:100%;height:20px;float:left;"></div>
@@ -101,7 +104,7 @@
                 <div class="row">
                     <div class="col-sm-6 col-md-4">
                         <div class="thumbnail">
-                            <img src="../public/img/pet-busca-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
+                            <img src="../public/img/site/pet-busca-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
                             <div class="caption">
                                 <h3>Buscar Pets</h3>
                                 <p>Encontre e adote um novo amigo!</p>
@@ -113,7 +116,7 @@
                     </div>
                     <div class="col-sm-6 col-md-4">
                         <div class="thumbnail">
-                            <img src="../public/img/pet-cadastro-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
+                            <img src="../public/img/site/pet-cadastro-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
                             <div class="caption">
                                 <h3>Cadastre um novo Pet</h3>
                                 <p>Entre aqui e cadastre um pet abandonado!</p>
@@ -125,7 +128,7 @@
                     </div>
                     <div class="col-sm-6 col-md-4">
                         <div class="thumbnail">
-                            <img src="../public/img/pet-denuncie-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
+                            <img src="../public/img/site/pet-denuncie-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
                             <div class="caption">
                                 <h3>Denuncie!</h3>
                                 <p>Encontrou algum animal sofrendo maus tratos, ajude a denunciar!</p>
@@ -149,5 +152,7 @@
         </div>
         <script src="../public/js/jquery-3.1.1.min.js"></script>
         <script src="../public/js/bootstrap.min.js"></script>
+        <script src="../public/js/ekko-lightbox.min.js"></script>
+        <script src="../public/js/main.js"></script>
     </body>
 </html>

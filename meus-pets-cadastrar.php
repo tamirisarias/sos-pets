@@ -5,9 +5,18 @@
 <?php require('Core/Transaction.php'); ?>
 <?php require('Core/Model/Session.php'); ?>
 <?php require('Core/Model/Register.php'); ?>
+<?php require('Core/Model/PetRegister.php'); ?>
 <?php require('Core/Controller/Main.php'); ?>
 <?php require('Core/Controller/Session.php'); ?>
 <?php require('Core/Controller/Register.php'); ?>
+<?php require('Core/Controller/PetRegister.php'); ?>
+<?php
+
+if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
+    $response->httpRedirect('cadastrar.php');
+}
+
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -18,6 +27,7 @@
         <meta name="author" content="tamiris arias">
         <title>SOS Pets</title>
         <link href="../public/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../public/css/ekko-lightbox.min.css" rel="stylesheet">
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -98,10 +108,37 @@
                 <li>
                     <a href="meus-pets.php">Meus Pets</a>
                 </li>
-                <li class="active">Cadastrar</li>
+                <li class="active"><?php if (!empty($pet->id)) { ?>Editar<?php } else { ?>Cadastrar<?php } ?></li>
             </ol>
             <div class="col-md-12">
                 <div class="row">
+                    <?php if (!empty($pet->id)) { ?>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-6" style="padding-top:8px;">
+                                    Fotos do Pet <b><?php if (!empty($pet->nome)) { print $pet->nome; } ?></b>
+                                </div>
+                                <div class="col-md-6">
+                                    <a class="btn btn-default pull-right" href="meus-pets.php" role="button">
+                                        <span class="glyphicon glyphicon-share-alt"></span> Voltar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <?php foreach ($pet_photo as $photo) { ?>
+                                <div class="col-md-4">
+                                    <a href="<?php print $photo->path; ?>" class="thumbnail" data-title="Foto do Pet <b><?php if (!empty($pet->nome)) { print $pet->nome; } ?></b>" data-toggle="lightbox" data-gallery="gallery-pet">
+                                        <img src="<?php print $photo->path; ?>" height="250" width="250" alt="<?php if (!empty($pet->nome)) { print $pet->nome; } ?>">
+                                    </a>
+                                </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php } ?>
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <div class="row">
@@ -116,49 +153,58 @@
                             </div>
                         </div>
                         <div class="panel-body">
-                            <form class="form" method="POST" action="meus-pets-cadastrar.php">
+                            <form class="form" enctype="multipart/form-data" method="POST" action="meus-pets-cadastrar.php">
                                 <input name="type" value="form-pet-register" type="hidden">
+                                <input name="id" value="<?php print $pet->id; ?>" type="hidden">
                                 <div class="form-group">
-                                    <label for="pet_register_input_name">Nome para o Pet</label>
-                                    <input type="text" name="nome" class="form-control" id="pet_register_input_name" placeholder="Nome do Pet">
+                                    <label for="pet_register_input_name">* Nome para o Pet</label>
+                                    <input type="text" name="nome" value="<?php if (!empty($pet->nome)) { print $pet->nome; } ?>" class="form-control" id="pet_register_input_name" placeholder="Nome do Pet">
                                 </div>
                                 <div class="form-group">
-                                    <label for="pet_register_input_type">Tipo</label>
+                                    <label for="pet_register_input_type">* Tipo</label>
                                     <select class="form-control" name="tipo" id="pet_register_input_type">
                                         <option value="">--- Selecione ---</option>
-                                        <option value="1">Cão</option>
-                                        <option value="2">Gato</option>
+                                        <option value="1" <?php if (!empty($pet->tipo) && $pet->tipo == '1') { ?>selected="selected"<?php } ?>>Cão</option>
+                                        <option value="2" <?php if (!empty($pet->tipo) && $pet->tipo == '2') { ?>selected="selected"<?php } ?>>Gato</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="pet_register_input_breed">Raça</label>
-                                    <input type="text" name="raca" class="form-control" id="pet_register_input_breed" placeholder="Raça">
+                                    <label for="pet_register_input_breed">* Raça</label>
+                                    <input type="text" name="raca" value="<?php if (!empty($pet->raca)) { print $pet->raca; } ?>" class="form-control" id="pet_register_input_breed" placeholder="Raça">
                                 </div>
                                 <div class="form-group">
-                                    <label for="pet_register_input_postage">Porte</label>
+                                    <label for="pet_register_input_postage">* Porte</label>
                                     <select class="form-control" name="porte" id="pet_register_input_postage">
                                         <option value="">--- Selecione ---</option>
-                                        <option value="1">Filhote</option>
-                                        <option value="2">Adulto</option>
+                                        <option value="1" <?php if (!empty($pet->porte) && $pet->porte == '1') { ?>selected="selected"<?php } ?>>Filhote</option>
+                                        <option value="2" <?php if (!empty($pet->porte) && $pet->porte == '2') { ?>selected="selected"<?php } ?>>Adulto</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="pet_register_input_city">Cidade</label>
-                                    <select class="form-control" name="cidade" id="pet_register_input_state">
-                                        <option value="1">--- Selecione ---</option>
-                                        <optgroup label="RS">
-                                            <option value="1">Porto Alegre</option>
-                                            <option value="2">Canoas</option>
-                                            <option value="3">Novo Hamburgo</option>
+                                    <label for="pet_register_input_city">* Cidade</label>
+                                    <select class="form-control" name="city_id" id="pet_register_input_city">
+                                        <option value="0">--- Selecione ---</option>
+                                        <?php foreach ($_SESSION['city'] as $state => $city_list) { ?>
+                                        <optgroup label="<?php print $state; ?>">
+                                        <?php foreach ($city_list as $city) { ?>
+                                        <option value="<?php print $city->id; ?>" <?php if (!empty($pet->city_id) && $pet->city_id == $city->id) { ?>selected="selected"<?php } ?>><?php print utf8_encode($city->nome); ?></option>
+                                        <?php } ?>
                                         </optgroup>
-                                        <optgroup label="SC">
-                                            <option value="4">Santa Catarina</option>
-                                            <option value="5">Camboriú</option>
-                                        </optgroup>
+                                        <?php } ?>
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pet_register_input_city">Fotos</label>
+                                    <input name="photo_1" type="file" id="pet_register_input_photo_1">
+                                    <p class="help-block">* Foto principal.</p>
+                                    <input name="photo_2" type="file" id="pet_register_input_photo_2">
+                                    <input name="photo_3" type="file" id="pet_register_input_photo_3">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Cadastrar</button>
                             </form>
+                        </div>
+                        <div class="panel-footer">
+                            Campos com (*) são de preenchimento obrigatório.
                         </div>
                     </div>
                 </div>
@@ -175,5 +221,7 @@
         </div>
         <script src="../public/js/jquery-3.1.1.min.js"></script>
         <script src="../public/js/bootstrap.min.js"></script>
+        <script src="../public/js/ekko-lightbox.min.js"></script>
+        <script src="../public/js/main.js"></script>
     </body>
 </html>

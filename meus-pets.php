@@ -5,9 +5,18 @@
 <?php require('Core/Transaction.php'); ?>
 <?php require('Core/Model/Session.php'); ?>
 <?php require('Core/Model/Register.php'); ?>
+<?php require('Core/Model/PetRegister.php'); ?>
 <?php require('Core/Controller/Main.php'); ?>
 <?php require('Core/Controller/Session.php'); ?>
 <?php require('Core/Controller/Register.php'); ?>
+<?php require('Core/Controller/PetRegister.php'); ?>
+<?php
+
+if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
+    $response->httpRedirect('cadastrar.php');
+}
+
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -18,6 +27,7 @@
         <meta name="author" content="tamiris arias">
         <title>SOS Pets</title>
         <link href="../public/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../public/css/ekko-lightbox.min.css" rel="stylesheet">
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -106,7 +116,7 @@
                                     <label for="exampleInputName2">Tipo</label>
                                     <select class="form-control">
                                         <option>--- selecione ---</option>
-                                        <option>Cachorro</option>
+                                        <option>Cão</option>
                                         <option>Gato</option>
                                     </select>
                                 </div>
@@ -124,10 +134,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail2">Cidade</label>
-                                    <select class="form-control">
-                                        <option>--- selecione ---</option>
-                                        <option>Porto Alegre</option>
-                                        <option>Canoas</option>
+                                    <select class="form-control" name="cidade" id="my_pet_input_city">
+                                        <option value="0">--- Selecione ---</option>
+                                        <?php foreach ($_SESSION['city'] as $state => $city_list) { ?>
+                                        <optgroup label="<?php print $state; ?>">
+                                        <?php foreach ($city_list as $city) { ?>
+                                        <option value="<?php print $city->id; ?>"><?php print utf8_encode($city->nome); ?></option>
+                                        <?php } ?>
+                                        </optgroup>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Buscar Pet</button>
@@ -165,150 +180,37 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php $pet_register->setUserId($_SESSION['user']['id']); ?>
+                                    <?php $pet_register_listing = $pet_register->listing(); ?>
+                                    <?php if (empty($pet_register_listing)) { ?>
                                     <tr>
-                                        <td>[FOTO.JPG]</td>
-                                        <td>Bixano</td>
-                                        <td>GATO</td>
-                                        <td>Filhote</td>
-                                        <td>Siames</td>
-                                        <td>RS/Porto Algre</td>
+                                        <td colspan="8">
+                                            <p class="text-center">Não há Pets cadastrados!</p>
+                                        </td>
+                                    </tr>
+                                    <?php } ?>
+                                    <?php foreach ($pet_register_listing as $key => $pet_register) { ?>
+                                    <tr>
+                                        <td>
+                                            <img src="<?php print $pet_register->photo[0]->path; ?>" width="50" height="50" title="<?php print $pet_register->nome; ?>" alt="<?php print $pet_register->nome; ?>"></img>
+                                        </td>
+                                        <td><?php print utf8_encode($pet_register->nome); ?></td>
+                                        <td><?php print $pet_register->tipo_label; ?></td>
+                                        <td><?php print utf8_encode($pet_register->raca); ?></td>
+                                        <td><?php print $pet_register->porte_label; ?></td>
+                                        <td><?php print $pet_register->city->estadosigla; ?>/<?php print utf8_encode($pet_register->city->nome); ?></td>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="...">
-                                                <button type="button" class="btn btn-default">
+                                                <a href="meus-pets-cadastrar.php?edit_pet_id=<?php print $pet_register->id; ?>" class="btn btn-default">
                                                     <span class="glyphicon glyphicon-edit"></span> Editar
-                                                </button>
-                                                <button type="button" class="btn btn-default">
+                                                </a>
+                                                <a href="meus-pets.php?delete_pet_id=<?php print $pet_register->id; ?>" class="btn btn-default">
                                                     <span class="glyphicon glyphicon-trash"></span> Excluir
-                                                </button>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>[FOTO.JPG]</td>
-                                        <td>Bixano</td>
-                                        <td>GATO</td>
-                                        <td>Filhote</td>
-                                        <td>Siames</td>
-                                        <td>RS/Porto Algre</td>
-                                        <td>
-                                            <div class="btn-group" role="group" aria-label="...">
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-edit"></span> Editar
-                                                </button>
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-trash"></span> Excluir
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>[FOTO.JPG]</td>
-                                        <td>Bixano</td>
-                                        <td>GATO</td>
-                                        <td>Filhote</td>
-                                        <td>Siames</td>
-                                        <td>RS/Porto Algre</td>
-                                        <td>
-                                            <div class="btn-group" role="group" aria-label="...">
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-edit"></span> Editar
-                                                </button>
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-trash"></span> Excluir
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>[FOTO.JPG]</td>
-                                        <td>Bixano</td>
-                                        <td>GATO</td>
-                                        <td>Filhote</td>
-                                        <td>Siames</td>
-                                        <td>RS/Porto Algre</td>
-                                        <td>
-                                            <div class="btn-group" role="group" aria-label="...">
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-edit"></span> Editar
-                                                </button>
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-trash"></span> Excluir
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>[FOTO.JPG]</td>
-                                        <td>Bixano</td>
-                                        <td>GATO</td>
-                                        <td>Filhote</td>
-                                        <td>Siames</td>
-                                        <td>RS/Porto Algre</td>
-                                        <td>
-                                            <div class="btn-group" role="group" aria-label="...">
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-edit"></span> Editar
-                                                </button>
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-trash"></span> Excluir
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>[FOTO.JPG]</td>
-                                        <td>Bixano</td>
-                                        <td>GATO</td>
-                                        <td>Filhote</td>
-                                        <td>Siames</td>
-                                        <td>RS/Porto Algre</td>
-                                        <td>
-                                            <div class="btn-group" role="group" aria-label="...">
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-edit"></span> Editar
-                                                </button>
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-trash"></span> Excluir
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>[FOTO.JPG]</td>
-                                        <td>Bixano</td>
-                                        <td>GATO</td>
-                                        <td>Filhote</td>
-                                        <td>Siames</td>
-                                        <td>RS/Porto Algre</td>
-                                        <td>
-                                            <div class="btn-group" role="group" aria-label="...">
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-edit"></span> Editar
-                                                </button>
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-trash"></span> Excluir
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>[FOTO.JPG]</td>
-                                        <td>Bixano</td>
-                                        <td>GATO</td>
-                                        <td>Filhote</td>
-                                        <td>Siames</td>
-                                        <td>RS/Porto Algre</td>
-                                        <td>
-                                            <div class="btn-group" role="group" aria-label="...">
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-edit"></span> Editar
-                                                </button>
-                                                <button type="button" class="btn btn-default">
-                                                    <span class="glyphicon glyphicon-trash"></span> Excluir
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>
@@ -327,5 +229,7 @@
         </div>
         <script src="../public/js/jquery-3.1.1.min.js"></script>
         <script src="../public/js/bootstrap.min.js"></script>
+        <script src="../public/js/ekko-lightbox.min.js"></script>
+        <script src="../public/js/main.js"></script>
     </body>
 </html>

@@ -17,6 +17,9 @@ if (!empty($_POST) && isset($_POST['type']) && ($_POST['type'] == 'form-login'))
 
     } else {
         $response->setFlashMessage('Bem vindo!');
+        $response->httpRedirect('meus-pets.php');
+
+        exit();
     }
 
 }

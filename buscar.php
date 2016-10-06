@@ -5,9 +5,11 @@
 <?php require('Core/Transaction.php'); ?>
 <?php require('Core/Model/Session.php'); ?>
 <?php require('Core/Model/Register.php'); ?>
+<?php require('Core/Model/PetRegister.php'); ?>
 <?php require('Core/Controller/Main.php'); ?>
 <?php require('Core/Controller/Session.php'); ?>
 <?php require('Core/Controller/Register.php'); ?>
+<?php require('Core/Controller/PetRegister.php'); ?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -18,6 +20,7 @@
         <meta name="author" content="tamiris arias">
         <title>SOS Pets</title>
         <link href="../public/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../public/css/ekko-lightbox.min.css" rel="stylesheet">
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -104,7 +107,7 @@
                             <label for="exampleInputName2">Tipo</label>
                             <select class="form-control">
                                 <option>--- selecione ---</option>
-                                <option>Cachorro</option>
+                                <option>Cão</option>
                                 <option>Gato</option>
                             </select>
                         </div>
@@ -122,10 +125,17 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail2">Cidade</label>
-                            <select class="form-control">
-                                <option>--- selecione ---</option>
-                                <option>Porto Alegre</option>
-                                <option>Canoas</option>
+                            <select class="form-control" name="cidade" id="pet_search_input_city">
+                                <option value="1">--- Selecione ---</option>
+                                <optgroup label="RS">
+                                    <option value="1">Porto Alegre</option>
+                                    <option value="2">Canoas</option>
+                                    <option value="3">Novo Hamburgo</option>
+                                </optgroup>
+                                <optgroup label="SC">
+                                    <option value="4">Santa Catarina</option>
+                                    <option value="5">Camboriú</option>
+                                </optgroup>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Buscar Pet</button>
@@ -227,5 +237,7 @@
         </div>
         <script src="../public/js/jquery-3.1.1.min.js"></script>
         <script src="../public/js/bootstrap.min.js"></script>
+        <script src="../public/js/ekko-lightbox.min.js"></script>
+        <script src="../public/js/main.js"></script>
     </body>
 </html>

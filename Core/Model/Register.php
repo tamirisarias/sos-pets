@@ -71,7 +71,7 @@ Class Register extends WException {
         $this->response = $response;
     }
     /**
-     * retorna um registro de usuário
+     * retorna um registro
      */
     public function get() {
         $email = $this->getEmail();
@@ -105,7 +105,7 @@ Class Register extends WException {
         return $result;
     }
     /**
-     * salva um novo registro de usuário
+     * salva um novo registro
      */
     public function save() {
         $nome = $this->getNome();
