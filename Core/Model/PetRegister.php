@@ -424,6 +424,109 @@ Class PetRegister extends WException {
         return true;
     }
     /**
+     * deleta um registro
+     */
+    public function delete() {
+        $response = $this->getResponse();
+
+        $id = $this->getId();
+
+        $transaction = $this->getTransaction();
+        $transaction->beginTransaction();
+
+        $resource = $transaction->getResource();
+
+        $sql = "delete from pet where id = ?";
+        $sql_value_list = [$id];
+
+        try {
+            $resource_prepare = $resource->prepare($sql);
+
+            $transaction_resource_error_info = $resource->errorInfo();
+
+            if ($transaction_resource_error_info[0] != '00000') {
+                $this->setError('Erro na remoção do Pet!');
+
+                $transaction->rollBack();
+
+                return false;
+            }
+
+            $result = $resource_prepare->execute($sql_value_list);
+
+        } catch (PDOException $error) {
+            $this->setError('Erro na remoção do Pet!');
+
+            $transaction->rollBack();
+
+            return false;
+
+        } catch (Exception $error) {
+            $this->setError('Erro na remoção do Pet!');
+
+            $transaction->rollBack();
+
+            return false;
+        }
+
+        $pdo_query_error_info = $resource_prepare->errorInfo();
+
+        if ($pdo_query_error_info[0] != '00000') {
+            $this->setError('Erro na remoção do Pet!');
+
+            $transaction->rollBack();
+
+            return false;
+        }
+
+        $sql = "delete from photo where pet_id = ?";
+        $sql_value_list = [$id];
+
+        try {
+            $resource_prepare = $resource->prepare($sql);
+
+            $transaction_resource_error_info = $resource->errorInfo();
+
+            if ($transaction_resource_error_info[0] != '00000') {
+                $this->setError('Erro na remoção das fotos do Pet!');
+
+                $transaction->rollBack();
+
+                return false;
+            }
+
+            $result = $resource_prepare->execute($sql_value_list);
+
+        } catch (PDOException $error) {
+            $this->setError('Erro na remoção das fotos do Pet!');
+
+            $transaction->rollBack();
+
+            return false;
+
+        } catch (Exception $error) {
+            $this->setError('Erro na remoção das fotos do Pet!');
+
+            $transaction->rollBack();
+
+            return false;
+        }
+
+        $pdo_query_error_info = $resource_prepare->errorInfo();
+
+        if ($pdo_query_error_info[0] != '00000') {
+            $this->setError('Erro na remoção das fotos do Pet!');
+
+            $transaction->rollBack();
+
+            return false;
+        }
+
+        $transaction->commit();
+
+        return true;
+    }
+    /**
      * salva um novo registro
      */
     public function save() {

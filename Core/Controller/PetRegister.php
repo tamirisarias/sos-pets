@@ -15,10 +15,31 @@ $pet->datacriacao = null;
 $pet_photo = [];
 
 if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
-    $pet_register->setResponse($response);
-    $pet_register->setId($_REQUEST['id']);
-    $pet = $pet_register->get();
-    $pet_photo = $pet_register->photoListing();
+    if (isset($_REQUEST['delete']) && !empty($_REQUEST['delete'])) {
+        $pet_register->setResponse($response);
+        $pet_register->setId($_REQUEST['id']);
+        $pet_register->delete();
+
+        $error_list = $pet_register->getError();
+
+        if (!empty($error_list)) {
+            foreach ($error_list as $error) {
+                $response->setFlashMessage($error);
+            }
+
+        } else {
+            $response->setFlashMessage('Pet removido com sucesso!');
+            $response->httpRedirect('meus-pets.php');
+
+            exit();
+        }
+
+    } else {
+        $pet_register->setResponse($response);
+        $pet_register->setId($_REQUEST['id']);
+        $pet = $pet_register->get();
+        $pet_photo = $pet_register->photoListing();
+    }
 }
 
 if (!empty($_POST) && isset($_POST['type']) && ($_POST['type'] == 'form-pet-register')) {
