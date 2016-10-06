@@ -194,7 +194,7 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                                     <?php foreach ($pet_register_listing as $key => $pet_register) { ?>
                                     <tr>
                                         <td>
-                                            <img src="<?php print $pet_register->photo[0]->path; ?>" width="50" height="50" title="<?php print $pet_register->nome; ?>" alt="<?php print $pet_register->nome; ?>"></img>
+                                            <img src="<?php print $pet_register->photo[1]->path; ?>" width="50" height="50" title="<?php print $pet_register->nome; ?>" alt="<?php print $pet_register->nome; ?>"></img>
                                         </td>
                                         <td><?php print utf8_encode($pet_register->nome); ?></td>
                                         <td><?php print $pet_register->tipo_label; ?></td>
@@ -203,10 +203,10 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                                         <td><?php print $pet_register->city->estadosigla; ?>/<?php print utf8_encode($pet_register->city->nome); ?></td>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="...">
-                                                <a href="meus-pets-cadastrar.php?edit_pet_id=<?php print $pet_register->id; ?>" class="btn btn-default">
+                                                <a href="meus-pets-cadastrar.php?id=<?php print $pet_register->id; ?>" class="btn btn-default">
                                                     <span class="glyphicon glyphicon-edit"></span> Editar
                                                 </a>
-                                                <a href="meus-pets.php?delete_pet_id=<?php print $pet_register->id; ?>" class="btn btn-default">
+                                                <a href="meus-pets.php?delete=1&id=<?php print $pet_register->id; ?>" class="btn btn-default">
                                                     <span class="glyphicon glyphicon-trash"></span> Excluir
                                                 </a>
                                             </div>

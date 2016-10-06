@@ -202,6 +202,16 @@ Class PetRegister extends WException {
             return false;
         }
 
+        if (!empty($result)) {
+            $result_tmp = [];
+
+            foreach ($result as $key => $item) {
+                $result_tmp[$item->nome] = $item;
+            }
+
+            $result = $result_tmp;
+        }
+
         return $result;
     }
     /**
@@ -303,13 +313,10 @@ Class PetRegister extends WException {
     /**
      * salva um novo registro
      */
-    public function photoSave($name,$path,$default = false,Transaction $transaction = null) {
+    public function photoSave($name,$path,$default = 0,Transaction $transaction = null) {
         $response = $this->getResponse();
 
         $id = $this->getId();
-
-        $sql = "insert into photo (`pet_id`,`nome`,`path`,`default`,`status`,`datacriacao`) values (?,?,?,?,?,?)";
-        $sql_value_list = [$id,$name,$path,$default,'1',date('Y/m/d H:i:s')];
 
         if (empty($transaction)) {
             $transaction = $this->getTransaction();
@@ -318,12 +325,63 @@ Class PetRegister extends WException {
 
         $resource = $transaction->getResource();
 
+        $sql = "delete from photo where pet_id = ? and nome = ?";
+        $sql_value_list = [$id,$name];
+
         try {
             $resource_prepare = $resource->prepare($sql);
 
             $transaction_resource_error_info = $resource->errorInfo();
 
             if ($transaction_resource_error_info[0] != '00000') {
+                $this->setError(vsprintf('Erro na remoção da foto "%s"!',[$name,]));
+
+                $transaction->rollBack();
+
+                return false;
+            }
+
+            $result = $resource_prepare->execute($sql_value_list);
+
+        } catch (PDOException $error) {
+            $this->setError(vsprintf('Erro na remoção da foto "%s"!',[$name,]));
+
+            $transaction->rollBack();
+
+            return false;
+
+        } catch (Exception $error) {
+            $this->setError(vsprintf('Erro na remoção da foto "%s"!',[$name,]));
+
+            $transaction->rollBack();
+
+            return false;
+        }
+
+        $pdo_query_error_info = $resource_prepare->errorInfo();
+
+        if ($pdo_query_error_info[0] != '00000') {
+            $this->setError(vsprintf('Erro na remoção da foto "%s"!',[$name,]));
+
+            $transaction->rollBack();
+
+            return false;
+        }
+
+        if (empty($transaction)) {
+            $transaction->commit();
+        }
+
+        $sql = "insert into photo (`pet_id`,`nome`,`path`,`default`,`status`,`datacriacao`) values (?,?,?,?,?,?)";
+        $sql_value_list = [$id,$name,$path,$default,'1',date('Y/m/d H:i:s')];
+
+        try {
+            $resource_prepare = $resource->prepare($sql);
+
+            $transaction_resource_error_info = $resource->errorInfo();
+
+            if ($transaction_resource_error_info[0] != '00000') {
+                print_r($transaction_resource_error_info);
                 $this->setError(vsprintf('Erro no cadastro da foto "%s"!',[$name,]));
 
                 $transaction->rollBack();
@@ -351,6 +409,7 @@ Class PetRegister extends WException {
         $pdo_query_error_info = $resource_prepare->errorInfo();
 
         if ($pdo_query_error_info[0] != '00000') {
+            print_r($pdo_query_error_info);
             $this->setError(vsprintf('Erro no cadastro da foto "%s"!',[$name,]));
 
             $transaction->rollBack();
@@ -370,6 +429,7 @@ Class PetRegister extends WException {
     public function save() {
         $response = $this->getResponse();
 
+        $id = $this->getId();
         $user_id = $this->getUserId();
         $city_id = $this->getCityId();
         $nome = $this->getNome();
@@ -377,8 +437,14 @@ Class PetRegister extends WException {
         $raca = $this->getRaca();
         $porte = $this->getPorte();
 
-        $sql = "insert into pet (user_id,city_id,nome,tipo,raca,porte,status,datacriacao) values (?,?,?,?,?,?,?,?)";
-        $sql_value_list = [$user_id,$city_id,$nome,$tipo,$raca,$porte,'1',date('Y/m/d H:i:s')];
+        if (!empty($id)) {
+            $sql = "update pet set city_id = ?, nome = ?, tipo = ?, raca = ?, porte = ? where id = ?";
+            $sql_value_list = [$city_id,$nome,$tipo,$raca,$porte,$id];
+
+        } else {
+            $sql = "insert into pet (user_id,city_id,nome,tipo,raca,porte,status,datacriacao) values (?,?,?,?,?,?,?,?)";
+            $sql_value_list = [$user_id,$city_id,$nome,$tipo,$raca,$porte,'1',date('Y/m/d H:i:s')];
+        }
 
         $transaction = $this->getTransaction();
         $transaction->beginTransaction();
@@ -429,10 +495,13 @@ Class PetRegister extends WException {
         $photo_3 = $this->getPhoto3();
 
         if (!empty($photo_1['tmp_name']) || !empty($photo_2['tmp_name']) || !empty($photo_3['tmp_name'])) {
-            $pet_id = $transaction->lastInsertId();
-            $this->setId($pet_id);
+            if (empty($id)) {
+                $id = $transaction->lastInsertId();
+            }
 
-            $dir_upload = vsprintf('public/img/pet/%s',[$pet_id,]);
+            $this->setId($id);
+
+            $dir_upload = vsprintf('public/img/pet/%s',[$id,]);
 
             if (!is_dir($dir_upload)) {
                 $mkdir_result = mkdir($dir_upload,0777,true);
@@ -456,7 +525,7 @@ Class PetRegister extends WException {
                     $this->setError('Erro no upload de imagem para foto principal, formato de arquivo incompátivel!');
 
                 } else {
-                    $filename = vsprintf('%s/default%s',[$dir_upload,$mime_types[$photo_1['type']]]);
+                    $filename = vsprintf('%s/1%s',[$dir_upload,$mime_types[$photo_1['type']]]);
 
                     $upload = move_uploaded_file($photo_1['tmp_name'],$filename);
 
@@ -464,7 +533,7 @@ Class PetRegister extends WException {
                         $this->setError('Erro no upload de imagem para foto principal!');
 
                     } else {
-                        $photo_save_result = $this->photoSave('PRINCIPAL',$filename,true,$transaction);
+                        $photo_save_result = $this->photoSave('1',$filename,'1',$transaction);
 
                         if (empty($photo_save_result)) {
                             $transaction->rollBack();
@@ -488,7 +557,7 @@ Class PetRegister extends WException {
                         $this->setError('Erro no upload de imagem para foto 2!');
 
                     } else {
-                        $photo_save_result = $this->photoSave('2',$filename,false,$transaction);
+                        $photo_save_result = $this->photoSave('2',$filename,'0',$transaction);
 
                         if (empty($photo_save_result)) {
                             $transaction->rollBack();
@@ -512,7 +581,7 @@ Class PetRegister extends WException {
                         $this->setError('Erro no upload de imagem para foto 3!');
 
                     } else {
-                        $photo_save_result = $this->photoSave('3',$filename,false,$transaction);
+                        $photo_save_result = $this->photoSave('3',$filename,'0',$transaction);
 
                         if (empty($photo_save_result)) {
                             $transaction->rollBack();

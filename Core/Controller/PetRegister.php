@@ -14,15 +14,15 @@ $pet->datacriacao = null;
 
 $pet_photo = [];
 
-if (!empty($_GET) && isset($_GET['edit_pet_id']) && !empty($_GET['edit_pet_id'])) {
+if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
     $pet_register->setResponse($response);
-    $pet_register->setId($_GET['edit_pet_id']);
+    $pet_register->setId($_REQUEST['id']);
     $pet = $pet_register->get();
     $pet_photo = $pet_register->photoListing();
-
 }
 
 if (!empty($_POST) && isset($_POST['type']) && ($_POST['type'] == 'form-pet-register')) {
+    $request_id = Util::get($_POST,'id',null);
     $request_city_id = Util::get($_POST,'city_id',null);
     $request_nome = Util::get($_POST,'nome',null);
     $request_tipo = Util::get($_POST,'tipo',null);
@@ -32,11 +32,12 @@ if (!empty($_POST) && isset($_POST['type']) && ($_POST['type'] == 'form-pet-regi
     $request_photo_2 = Util::get($_FILES,'photo_2',null);
     $request_photo_3 = Util::get($_FILES,'photo_3',null);
 
-    if (empty($request_city_id) || empty($request_nome) || empty($request_tipo) || empty($request_raca) || empty($request_porte) || empty($request_photo_1['tmp_name'])) {
+    if (empty($request_city_id) || empty($request_nome) || empty($request_tipo) || empty($request_raca) || empty($request_porte) || (empty($request_photo_1['tmp_name']) && empty($request_id))) {
         $response->setFlashMessage('Preencha todos os campos obrigatórios!');
 
     } else {
         $pet_register->setResponse($response);
+        $pet_register->setId($request_id);
         $pet_register->setUserId($_SESSION['user']['id']);
         $pet_register->setCityId($request_city_id);
         $pet_register->setNome($request_nome);
