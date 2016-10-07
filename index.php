@@ -130,7 +130,7 @@
                         <img src="../public/img/site/pet-denuncie-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
                         <div class="caption">
                             <h3>Denuncie!</h3>
-                            <p>Encontrou algum animal sofrendo maus tratos, ajude a denunciar!</p>
+                            <p>Denuncie algum animal sofrendo maus tratos!</p>
                             <p>
                                 <a href="denunciar.php" class="btn btn-primary" role="button">Denunciar</a>
                             </p>
