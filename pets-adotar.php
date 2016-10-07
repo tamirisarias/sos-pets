@@ -10,13 +10,6 @@
 <?php require('Core/Controller/Session.php'); ?>
 <?php require('Core/Controller/Register.php'); ?>
 <?php require('Core/Controller/PetRegister.php'); ?>
-<?php
-
-if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
-    $response->httpRedirect('cadastrar.php');
-}
-
-?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -28,6 +21,7 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
         <title>SOS Pets</title>
         <link href="../public/css/bootstrap.min.css" rel="stylesheet">
         <link href="../public/css/ekko-lightbox.min.css" rel="stylesheet">
+        <link href="../public/css/sweetalert.css" rel="stylesheet">
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -106,9 +100,9 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                     <a href="index.php">SOS Pets</a>
                 </li>
                 <li>
-                    <a href="meus-pets.php">Meus Pets</a>
+                    <a href="buscar.php">Buscar</a>
                 </li>
-                <li class="active"><?php if (!empty($pet->id)) { ?>Editar<?php } else { ?>Cadastrar<?php } ?></li>
+                <li class="active">Adotar</li>
             </ol>
             <div class="col-md-12">
                 <div class="row">
@@ -120,7 +114,7 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                                     Fotos do Pet <b><?php if (!empty($pet->nome)) { print $pet->nome; } ?></b>
                                 </div>
                                 <div class="col-md-6">
-                                    <a class="btn btn-default pull-right" href="meus-pets.php" role="button">
+                                    <a class="btn btn-default pull-right" href="buscar.php" role="button">
                                         <span class="glyphicon glyphicon-share-alt"></span> Voltar
                                     </a>
                                 </div>
@@ -143,70 +137,53 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-md-6" style="padding-top:8px;">
-                                    Cadastro de novo Pet!
+                                    Dados do Pet <b><?php print $pet->nome; ?></b>
                                 </div>
                                 <div class="col-md-6">
-                                    <a class="btn btn-default pull-right" href="meus-pets.php" role="button">
+                                    <a class="btn btn-default pull-right" href="buscar.php" role="button">
                                         <span class="glyphicon glyphicon-share-alt"></span> Voltar
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <div class="panel-body">
-                            <form class="form" enctype="multipart/form-data" method="POST" action="meus-pets-cadastrar.php">
-                                <input name="type" value="form-pet-register" type="hidden">
-                                <input name="id" value="<?php print $pet->id; ?>" type="hidden">
-                                <div class="form-group">
-                                    <label for="pet_register_input_name">* Nome para o Pet</label>
-                                    <input type="text" name="nome" value="<?php if (!empty($pet->nome)) { print $pet->nome; } ?>" class="form-control" id="pet_register_input_name" placeholder="Nome do Pet">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="button" id="btn_pet_adopt" class="btn btn-primary btn-lg btn-block">Quero adotar!</button>
+                                    <div class="list-group">
+                                        <a class="list-group-item">
+                                            <h4 class="list-group-item-heading">
+                                                Nome
+                                            </h4>
+                                            <p class="list-group-item-text"><?php print $pet->nome; ?></p>
+                                        </a>
+                                        <a class="list-group-item">
+                                            <h4 class="list-group-item-heading">
+                                                Tipo
+                                            </h4>
+                                            <p class="list-group-item-text"><?php print $pet->tipo_label; ?></p>
+                                        </a>
+                                        <a class="list-group-item">
+                                            <h4 class="list-group-item-heading">
+                                                Raça
+                                            </h4>
+                                            <p class="list-group-item-text"><?php print $pet->raca; ?></p>
+                                        </a>
+                                        <a class="list-group-item">
+                                            <h4 class="list-group-item-heading">
+                                                Porte
+                                            </h4>
+                                            <p class="list-group-item-text"><?php print $pet->porte_label; ?></p>
+                                        </a>
+                                        <a class="list-group-item">
+                                            <h4 class="list-group-item-heading">
+                                                Cidade
+                                            </h4>
+                                            <p class="list-group-item-text"><?php print $pet->city->nome; ?></p>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="pet_register_input_type">* Tipo</label>
-                                    <select class="form-control" name="tipo" id="pet_register_input_type">
-                                        <option value="">--- Selecione ---</option>
-                                        <option value="1" <?php if (!empty($pet->tipo) && $pet->tipo == '1') { ?>selected="selected"<?php } ?>>Cão</option>
-                                        <option value="2" <?php if (!empty($pet->tipo) && $pet->tipo == '2') { ?>selected="selected"<?php } ?>>Gato</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pet_register_input_breed">* Raça</label>
-                                    <input type="text" name="raca" value="<?php if (!empty($pet->raca)) { print $pet->raca; } ?>" class="form-control" id="pet_register_input_breed" placeholder="Raça">
-                                </div>
-                                <div class="form-group">
-                                    <label for="pet_register_input_postage">* Porte</label>
-                                    <select class="form-control" name="porte" id="pet_register_input_postage">
-                                        <option value="">--- Selecione ---</option>
-                                        <option value="1" <?php if (!empty($pet->porte) && $pet->porte == '1') { ?>selected="selected"<?php } ?>>Filhote</option>
-                                        <option value="2" <?php if (!empty($pet->porte) && $pet->porte == '2') { ?>selected="selected"<?php } ?>>Adulto</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pet_register_input_city">* Cidade</label>
-                                    <select class="form-control" name="city_id" id="pet_register_input_city">
-                                        <option value="0">--- Selecione ---</option>
-                                        <?php if (!empty($pet_city_listing)) { ?>
-                                        <?php foreach ($pet_city_listing as $state => $city_listing) { ?>
-                                        <optgroup label="<?php print $state; ?>">
-                                        <?php foreach ($city_listing as $city) { ?>
-                                        <option value="<?php print $city->id; ?>" <?php if ($pet->city_id == $city->id) { ?>selected="selected"<?php } ?>><?php print utf8_encode($city->nome); ?></option>
-                                        <?php } ?>
-                                        </optgroup>
-                                        <?php } ?>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pet_register_input_city">Fotos</label>
-                                    <input name="photo_1" type="file" id="pet_register_input_photo_1">
-                                    <p class="help-block">* Foto principal.</p>
-                                    <input name="photo_2" type="file" id="pet_register_input_photo_2">
-                                    <input name="photo_3" type="file" id="pet_register_input_photo_3">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Cadastrar</button>
-                            </form>
-                        </div>
-                        <div class="panel-footer">
-                            Campos com (*) são de preenchimento obrigatório.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -221,9 +198,34 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                 </div>
             </footer>
         </div>
+        <div style="display:none;" id="div_pet_adopt">
+            <div class="col-md-12">
+                <div class="list-group">
+                    <a class="list-group-item">
+                        <h4 class="list-group-item-heading">
+                            Nome do tutor
+                        </h4>
+                        <p class="list-group-item-text"><?php print $pet->user->nome; ?></p>
+                    </a>
+                    <a class="list-group-item">
+                        <h4 class="list-group-item-heading">
+                            Email
+                        </h4>
+                        <p class="list-group-item-text"><?php print $pet->user->email; ?></p>
+                    </a>
+                    <a class="list-group-item">
+                        <h4 class="list-group-item-heading">
+                            Telefone
+                        </h4>
+                        <p class="list-group-item-text"><?php print $pet->user->telefone; ?></p>
+                    </a>
+                </div>
+            </div>
+        </div>
         <script src="../public/js/jquery-3.1.1.min.js"></script>
         <script src="../public/js/bootstrap.min.js"></script>
         <script src="../public/js/ekko-lightbox.min.js"></script>
+        <script src="../public/js/sweetalert.min.js"></script>
         <script src="../public/js/main.js"></script>
     </body>
 </html>

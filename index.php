@@ -94,48 +94,46 @@
         </div>
         <?php } ?>
         <div class="container">
-            <div class="col-md-12">
-                <div class="row">
+            <div class="row">
+                <div class="col-md-12">
                     <img src="../public/img/site/pet-logo-1.jpg"  alt="SOS Pets" class="img-rounded" style="width:1140px;height:530px">
                 </div>
             </div>
             <div style="width:100%;height:20px;float:left;"></div>
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail">
-                            <img src="../public/img/site/pet-busca-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
-                            <div class="caption">
-                                <h3>Buscar Pets</h3>
-                                <p>Encontre e adote um novo amigo!</p>
-                                <p>
-                                    <a href="buscar.php" class="btn btn-primary" role="button">Procurar</a>
-                                </p>
-                            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <img src="../public/img/site/pet-busca-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
+                        <div class="caption">
+                            <h3>Buscar Pets</h3>
+                            <p>Encontre e adote um novo amigo!</p>
+                            <p>
+                                <a href="buscar.php" class="btn btn-primary" role="button">Procurar</a>
+                            </p>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail">
-                            <img src="../public/img/site/pet-cadastro-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
-                            <div class="caption">
-                                <h3>Cadastre um novo Pet</h3>
-                                <p>Entre aqui e cadastre um pet abandonado!</p>
-                                <p>
-                                    <a href="cadastrar.php" class="btn btn-primary" role="button">Cadastrar</a>
-                                </p>
-                            </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <img src="../public/img/site/pet-cadastro-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
+                        <div class="caption">
+                            <h3>Cadastre um novo Pet</h3>
+                            <p>Entre aqui e cadastre um pet abandonado!</p>
+                            <p>
+                                <a href="cadastrar.php" class="btn btn-primary" role="button">Cadastrar</a>
+                            </p>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail">
-                            <img src="../public/img/site/pet-denuncie-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
-                            <div class="caption">
-                                <h3>Denuncie!</h3>
-                                <p>Encontrou algum animal sofrendo maus tratos, ajude a denunciar!</p>
-                                <p>
-                                    <a href="denunciar.php" class="btn btn-primary" role="button">Denunciar</a>
-                                </p>
-                            </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <img src="../public/img/site/pet-denuncie-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
+                        <div class="caption">
+                            <h3>Denuncie!</h3>
+                            <p>Encontrou algum animal sofrendo maus tratos, ajude a denunciar!</p>
+                            <p>
+                                <a href="denunciar.php" class="btn btn-primary" role="button">Denunciar</a>
+                            </p>
                         </div>
                     </div>
                 </div>

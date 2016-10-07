@@ -168,6 +168,66 @@ Class PetRegister extends WException {
             return false;
         }
 
+        if (!empty($result)) {
+            if ($result->tipo == '1') {
+                $result->tipo_label = 'Cão';
+
+            } else {
+                $result->tipo_label = 'Gato';
+            }
+
+            if ($result->porte == '1') {
+                $result->porte_label = 'Filhote';
+
+            } else {
+                $result->porte_label = 'Adulto';
+            }
+
+            $this->setCityId($result->city_id);
+            $city = $this->cityGet();
+
+            $result->city = $city;
+
+            $this->setUserId($result->user_id);
+            $user = $this->userGet();
+
+            $result->user = $user;
+        }
+
+        return $result;
+    }
+    /**
+     * retorna um registro de usuario
+     */
+    public function userGet() {
+        $user_id = $this->getUserId();
+
+        $sql = "select * from user where id = ?";
+        $sql_value_list = [$user_id];
+
+        $transaction = $this->getTransaction();
+        $transaction->connect();
+        $resource = $transaction->getResource();
+
+        try {
+            $resource_prepare = $resource->prepare($sql);
+
+            $transaction_resource_error_info = $resource->errorInfo();
+
+            if ($transaction_resource_error_info[0] != '00000') {
+                return false;
+            }
+
+            $resource_prepare->execute($sql_value_list);
+            $result = $resource_prepare->fetch(PDO::FETCH_OBJ);
+
+        } catch (PDOException $error) {
+            return false;
+
+        } catch (Exception $error) {
+            return false;
+        }
+
         return $result;
     }
     /**
@@ -254,7 +314,22 @@ Class PetRegister extends WException {
     public function listing() {
         $user_id = $this->getUserId();
 
-        $sql = "select * from pet where user_id = ? order by id desc";
+        $sql_where = [];
+        $sql_value_list = [];
+
+        if (!empty($user_id)) {
+            $sql_where[] = 'user_id=?';
+            $sql_value_list[] = $user_id;
+        }
+
+        if (empty($sql_where)) {
+            $sql_where = '';
+
+        } else {
+            $sql_where = vsprintf('where %s',[implode(' and ',$sql_where)]);
+        }
+
+        $sql = vsprintf("select * from pet %s order by id desc",[$sql_where,]);
         $sql_value_list = [$user_id];
 
         $transaction = $this->getTransaction();
@@ -321,7 +396,12 @@ Class PetRegister extends WException {
         $porte = $this->getPorte();
 
         $sql_where = [];
-        $sql_value_list = [$user_id];
+        $sql_value_list = [];
+
+        if (!empty($user_id)) {
+            $sql_where[] = 'user_id=?';
+            $sql_value_list[] = $user_id;
+        }
 
         if (!empty($city_id)) {
             $sql_where[] = 'city_id=?';
@@ -347,10 +427,10 @@ Class PetRegister extends WException {
             $sql_where = '';
 
         } else {
-            $sql_where = vsprintf('and %s',[implode(' and ',$sql_where)]);
+            $sql_where = vsprintf('where %s',[implode(' and ',$sql_where)]);
         }
 
-        $sql = vsprintf("select * from pet where user_id = ? %s order by id desc",[$sql_where,]);
+        $sql = vsprintf("select * from pet %s order by id desc",[$sql_where,]);
 
         $transaction = $this->getTransaction();
         $transaction->connect();
@@ -790,6 +870,52 @@ Class PetRegister extends WException {
         }
 
         $transaction->commit();
+
+        return $result;
+    }
+    /**
+     * retorna uma lista de registros
+     */
+    public function cityListing() {
+        $sql = "select * from city order by id asc";
+
+        $transaction = $this->getTransaction();
+        $transaction->connect();
+        $resource = $transaction->getResource();
+
+        try {
+            $resource_prepare = $resource->prepare($sql);
+
+            $transaction_resource_error_info = $resource->errorInfo();
+
+            if ($transaction_resource_error_info[0] != '00000') {
+                return false;
+            }
+
+            $resource_prepare->execute([]);
+            $result = $resource_prepare->fetchAll(PDO::FETCH_OBJ);
+
+        } catch (PDOException $error) {
+            return false;
+
+        } catch (Exception $error) {
+            return false;
+        }
+
+        if (!empty($result)) {
+            $result_tmp = [];
+
+            foreach ($result as $key => $item) {
+                if (!array_key_exists($item->estadosigla,$result_tmp)) {
+                    $result_tmp[$item->estadosigla] = [$item];
+
+                } else {
+                    $result_tmp[$item->estadosigla][] = $item;
+                }
+            }
+
+            $result = $result_tmp;
+        }
 
         return $result;
     }

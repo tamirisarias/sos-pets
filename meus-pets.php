@@ -137,10 +137,10 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                                     <label for="my_pet_input_city">Cidade</label>
                                     <select class="form-control" name="city_id" id="my_pet_input_city">
                                         <option value="">--- Selecione ---</option>
-                                        <?php if (!empty($_SESSION) && isset($_SESSION['city']) && !empty($_SESSION['city'])) { ?>
-                                        <?php foreach ($_SESSION['city'] as $state => $city_list) { ?>
+                                        <?php if (!empty($pet_city_listing)) { ?>
+                                        <?php foreach ($pet_city_listing as $state => $city_listing) { ?>
                                         <optgroup label="<?php print $state; ?>">
-                                        <?php foreach ($city_list as $city) { ?>
+                                        <?php foreach ($city_listing as $city) { ?>
                                         <option value="<?php print $city->id; ?>" <?php if (!empty($flag_my_pet_search)) { if ($request_city_id == $city->id) { ?>selected="selected"<?php } } ?>><?php print utf8_encode($city->nome); ?></option>
                                         <?php } ?>
                                         </optgroup>
@@ -160,7 +160,7 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-md-6" style="padding-top:8px;">
-                                    Lista de Pets que você possuí!
+                                    Lista de Pets cadastrados!
                                 </div>
                                 <div class="col-md-6">
                                     <a class="btn btn-default pull-right" href="meus-pets-cadastrar.php" role="button">

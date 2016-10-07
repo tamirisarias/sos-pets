@@ -1,11 +1,21 @@
 {
-	"dsv": {
+	"dsv_": {
 		"driver": "mysql",
 		"host": "127.0.0.1",
 		"name": "dsv-sos-pets",
 		"user": "root",
 		"password": "mysql",
 		"port": "3306",
+		"autocommit": 1,
+		"debug": 0
+	},
+	"dsv": {
+		"driver": "mysql",
+		"host": "127.0.0.1",
+		"name": "dsv-sos-pets",
+		"user": "root",
+		"password": "mysql",
+		"port": "9002",
 		"autocommit": 1,
 		"debug": 0
 	},

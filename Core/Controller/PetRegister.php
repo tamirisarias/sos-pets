@@ -16,6 +16,9 @@ $pet_photo = [];
 $pet_register_search = [];
 
 $flag_my_pet_search = false;
+$flag_pet_search = false;
+
+$pet_city_listing = $pet_register->cityListing();
 
 if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
     if (isset($_REQUEST['delete']) && !empty($_REQUEST['delete'])) {
@@ -99,6 +102,31 @@ if (!empty($_GET) && isset($_GET['type']) && ($_GET['type'] == 'form-my-pet-sear
 
     $pet_register->setResponse($response);
     $pet_register->setUserId($_SESSION['user']['id']);
+    $pet_register->setCityId($request_city_id);
+    $pet_register->setTipo($request_tipo);
+    $pet_register->setRaca($request_raca);
+    $pet_register->setPorte($request_porte);
+    $pet_register_search = $pet_register->search();
+
+    $error_list = $pet_register->getError();
+
+    if (!empty($error_list)) {
+        foreach ($error_list as $error) {
+            $response->setFlashMessage($error);
+        }
+
+    }
+}
+
+if (!empty($_GET) && isset($_GET['type']) && ($_GET['type'] == 'form-pet-search')) {
+    $request_city_id = Util::get($_GET,'city_id',null);
+    $request_tipo = Util::get($_GET,'tipo',null);
+    $request_raca = Util::get($_GET,'raca',null);
+    $request_porte = Util::get($_GET,'porte',null);
+
+    $flag_pet_search = true;
+
+    $pet_register->setResponse($response);
     $pet_register->setCityId($request_city_id);
     $pet_register->setTipo($request_tipo);
     $pet_register->setRaca($request_raca);

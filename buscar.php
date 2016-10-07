@@ -100,52 +100,59 @@
                 </li>
                 <li class="active">Buscar</li>
             </ol>
-            <div class="col-md-12">
-                <div class="row">
-                    <form class="form-inline">
-                        <div class="form-group">
-                            <label for="exampleInputName2">Tipo</label>
-                            <select class="form-control">
-                                <option>--- selecione ---</option>
-                                <option>Cão</option>
-                                <option>Gato</option>
-                            </select>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <form class="form-inline" method="GET" action="buscar.php">
+                                <input name="type" value="form-pet-search" type="hidden">
+                                <div class="form-group">
+                                    <label for="search_pet_input_type">Tipo</label>
+                                    <select name="tipo" class="form-control" id="search_pet_input_type">
+                                        <option value="">--- selecione ---</option>
+                                        <option value="1" <?php if (!empty($flag_pet_search)) { if ($request_tipo == '1') { ?>selected="selected"<?php } } ?>>Cão</option>
+                                        <option value="2" <?php if (!empty($flag_pet_search)) { if ($request_tipo == '2') { ?>selected="selected"<?php } } ?>>Gato</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="search_pet_input_porte">Porte</label>
+                                    <select name="porte" class="form-control" id="search_pet_input_porte">
+                                        <option value="">--- selecione ---</option>
+                                        <option value="1" <?php if (!empty($flag_pet_search)) { if ($request_porte == '1') { ?>selected="selected"<?php } } ?>>Filhote</option>
+                                        <option value="2" <?php if (!empty($flag_pet_search)) { if ($request_porte == '2') { ?>selected="selected"<?php } } ?>>Adulto</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="search_pet_input_raca">Raça</label>
+                                    <input name="raca" type="text" value="<?php if (!empty($flag_pet_search)) { print $request_raca; } ?>" class="form-control" id="search_pet_input_raca" placeholder="Raça">
+                                </div>
+                                <div class="form-group">
+                                    <label for="search_pet_input_cidade">Cidade</label>
+                                    <select name="city_id" class="form-control" id="search_pet_input_cidade">
+                                        <option value="0">--- Selecione ---</option>
+                                        <?php if (!empty($pet_city_listing)) { ?>
+                                        <?php foreach ($pet_city_listing as $state => $city_listing) { ?>
+                                        <optgroup label="<?php print $state; ?>">
+                                        <?php foreach ($city_listing as $city) { ?>
+                                        <option value="<?php print $city->id; ?>" <?php if (!empty($flag_pet_search)) { if ($request_city_id == $city->id) { ?>selected="selected"<?php } } ?>><?php print utf8_encode($city->nome); ?></option>
+                                        <?php } ?>
+                                        </optgroup>
+                                        <?php } ?>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Buscar Pet</button>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail2">Porte</label>
-                            <select class="form-control">
-                                <option>--- selecione ---</option>
-                                <option>Filhote</option>
-                                <option>Adulto</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail2">Raça</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Raça">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail2">Cidade</label>
-                            <select class="form-control" name="cidade" id="pet_search_input_city">
-                                <option value="1">--- Selecione ---</option>
-                                <optgroup label="RS">
-                                    <option value="1">Porto Alegre</option>
-                                    <option value="2">Canoas</option>
-                                    <option value="3">Novo Hamburgo</option>
-                                </optgroup>
-                                <optgroup label="SC">
-                                    <option value="4">Santa Catarina</option>
-                                    <option value="5">Camboriú</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Buscar Pet</button>
-                    </form>
+                    </div>
                 </div>
             </div>
-            <div style="width:100%;height:20px;float:left;"></div>
-            <div class="col-md-12">
-                <div class="row">
-                    <table class="table table-striped">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Encontre um Pet para adotar!
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>Foto</th>
@@ -157,70 +164,41 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php if (!empty($flag_pet_search)) { ?>
+                            <?php $pet_register_listing = $pet_register_search; ?>
+                            <?php } else { ?>
+                            <?php $pet_register_listing = $pet_register->listing(); ?>
+                            <?php } ?>
+                            <?php if (empty($pet_register_listing)) { ?>
                             <tr>
-                                <td>[FOTO.JPG]</td>
-                                <td>Bixano</td>
-                                <td>GATO</td>
-                                <td>Filhote</td>
-                                <td>Siames</td>
-                                <td>RS/Porto Algre</td>
+                                <td colspan="8">
+                                    <?php if (!empty($flag_pet_search)) { ?>
+                                    <p class="text-center">Nenhum Pet encontrado para sua consulta!</p>
+                                    <?php } else { ?>
+                                    <p class="text-center">Não há Pets cadastrados!</p>
+                                    <?php } ?>
+                                </td>
                             </tr>
+                            <?php } ?>
+                            <?php foreach ($pet_register_listing as $key => $pet_register) { ?>
                             <tr>
-                                <td>[FOTO.JPG]</td>
-                                <td>Bixano</td>
-                                <td>GATO</td>
-                                <td>Filhote</td>
-                                <td>Siames</td>
-                                <td>RS/Porto Algre</td>
+                                <td>
+                                    <img src="<?php print $pet_register->photo[1]->path; ?>" width="50" height="50" title="<?php print $pet_register->nome; ?>" alt="<?php print $pet_register->nome; ?>"></img>
+                                </td>
+                                <td><?php print utf8_encode($pet_register->nome); ?></td>
+                                <td><?php print $pet_register->tipo_label; ?></td>
+                                <td><?php print utf8_encode($pet_register->raca); ?></td>
+                                <td><?php print $pet_register->porte_label; ?></td>
+                                <td><?php print $pet_register->city->estadosigla; ?>/<?php print utf8_encode($pet_register->city->nome); ?></td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="...">
+                                        <a href="pets-adotar.php?id=<?php print $pet_register->id; ?>" class="btn btn-success">
+                                            <span class="glyphicon glyphicon-heart-empty"></span> Adotar!
+                                        </a>
+                                    </div>
+                                </td>
                             </tr>
-                            <tr>
-                                <td>[FOTO.JPG]</td>
-                                <td>Bixano</td>
-                                <td>GATO</td>
-                                <td>Filhote</td>
-                                <td>Siames</td>
-                                <td>RS/Porto Algre</td>
-                            </tr>
-                            <tr>
-                                <td>[FOTO.JPG]</td>
-                                <td>Bixano</td>
-                                <td>GATO</td>
-                                <td>Filhote</td>
-                                <td>Siames</td>
-                                <td>RS/Porto Algre</td>
-                            </tr>
-                            <tr>
-                                <td>[FOTO.JPG]</td>
-                                <td>Bixano</td>
-                                <td>GATO</td>
-                                <td>Filhote</td>
-                                <td>Siames</td>
-                                <td>RS/Porto Algre</td>
-                            </tr>
-                            <tr>
-                                <td>[FOTO.JPG]</td>
-                                <td>Bixano</td>
-                                <td>GATO</td>
-                                <td>Filhote</td>
-                                <td>Siames</td>
-                                <td>RS/Porto Algre</td>
-                            </tr>
-                            <tr>
-                                <td>[FOTO.JPG]</td>
-                                <td>Bixano</td>
-                                <td>GATO</td>
-                                <td>Filhote</td>
-                                <td>Siames</td>
-                                <td>RS/Porto Algre</td>
-                            </tr>
-                            <tr>
-                                <td>[FOTO.JPG]</td>
-                                <td>Bixano</td>
-                                <td>GATO</td>
-                                <td>Filhote</td>
-                                <td>Siames</td>
-                                <td>RS/Porto Algre</td>
-                            </tr>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>
