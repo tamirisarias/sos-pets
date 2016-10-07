@@ -115,7 +115,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="thumbnail">
-                        <img src="../public/img/site/pet-cadastro-1.jpg" alt="Busca Pets" class=" img-responsive img-circle" width="340" height="340">
+                        <img src="../public/img/site/pet-cadastro-1.jpg" alt="Busca Pets" class="img-responsive img-circle" width="340" height="340">
                         <div class="caption">
                             <h3>Cadastre um novo Pet</h3>
                             <p>Entre aqui e cadastre um pet abandonado!</p>

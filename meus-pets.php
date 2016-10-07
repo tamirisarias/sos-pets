@@ -204,7 +204,7 @@ if (empty($_SESSION) || !isset($_SESSION['user']) || empty($_SESSION['user'])) {
                                         <?php foreach ($pet_register_listing as $key => $pet_register) { ?>
                                         <tr>
                                             <td>
-                                                <img src="<?php print $pet_register->photo[1]->path; ?>" width="50" height="50" title="<?php print $pet_register->nome; ?>" alt="<?php print $pet_register->nome; ?>"></img>
+                                                <img src="<?php print $pet_register->photo[1]->path; ?>" class="img-responsive img-thumbnail" width="50" height="50" title="<?php print $pet_register->nome; ?>" alt="<?php print $pet_register->nome; ?>"></img>
                                             </td>
                                             <td><?php print utf8_encode($pet_register->nome); ?></td>
                                             <td><?php print $pet_register->tipo_label; ?></td>

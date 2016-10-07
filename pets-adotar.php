@@ -125,7 +125,7 @@
                                 <?php foreach ($pet_photo as $photo) { ?>
                                 <div class="col-md-4">
                                     <a href="<?php print $photo->path; ?>" class="thumbnail" data-title="Foto do Pet <b><?php if (!empty($pet->nome)) { print $pet->nome; } ?></b>" data-toggle="lightbox" data-gallery="gallery-pet">
-                                        <img src="<?php print $photo->path; ?>" height="250" width="250" alt="<?php if (!empty($pet->nome)) { print $pet->nome; } ?>">
+                                        <img src="<?php print $photo->path; ?>" class="img-responsive img-rounded" height="250" width="250" alt="<?php if (!empty($pet->nome)) { print $pet->nome; } ?>">
                                     </a>
                                 </div>
                                 <?php } ?>
