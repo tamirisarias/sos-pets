@@ -3,7 +3,7 @@
 $pet = new stdClass;
 $pet->id = null;
 $pet->user = null;
-$pet->city = null;
+$pet->city_id = null;
 $pet->nome = null;
 $pet->tipo = null;
 $pet->raca = null;
@@ -11,6 +11,8 @@ $pet->porte = null;
 $pet->status = null;
 $pet->dataatualizacao = null;
 $pet->datacriacao = null;
+$pet->city = null;
+$pet->user = null;
 
 $pet_photo = [];
 $pet_register_search = [];
