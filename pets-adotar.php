@@ -149,7 +149,9 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button type="button" id="btn_pet_adopt" class="btn btn-primary btn-lg btn-block">Quero adotar!</button>
+                                    <button type="button" id="btn_pet_adopt" class="btn btn-primary btn-lg btn-block">
+                                        <span class="glyphicon glyphicon-heart"></span><span class="glyphicon glyphicon-heart"></span><span class="glyphicon glyphicon-heart"></span><span class="glyphicon glyphicon-heart"></span><span class="glyphicon glyphicon-heart"></span> Quero adotar esse Pet! <span class="glyphicon glyphicon-heart"></span><span class="glyphicon glyphicon-heart"></span><span class="glyphicon glyphicon-heart"></span><span class="glyphicon glyphicon-heart"></span><span class="glyphicon glyphicon-heart"></span>
+                                    </button>
                                     <div class="list-group">
                                         <a class="list-group-item">
                                             <h4 class="list-group-item-heading">

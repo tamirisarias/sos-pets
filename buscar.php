@@ -141,7 +141,7 @@
                                         <?php } ?>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Buscar Pet</button>
+                                <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Buscar Pet</button>
                             </form>
                         </div>
                     </div>
