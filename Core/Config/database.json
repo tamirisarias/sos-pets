@@ -5,7 +5,7 @@
 		"name": "dsv-sos-pets",
 		"user": "root",
 		"password": "mysql",
-		"port": "9002",
+		"port": "3306",
 		"autocommit": 1,
 		"debug": 0
 	},
