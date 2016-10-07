@@ -96,14 +96,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <img src="../public/img/site/pet-logo-1.jpg"  alt="SOS Pets" class="img-rounded" style="width:1140px;height:530px">
+                    <img src="../public/img/site/pet-logo-1.jpg"  alt="SOS Pets" class="img-responsive img-rounded" width="1140" height="530">
                 </div>
             </div>
             <div style="width:100%;height:20px;float:left;"></div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="thumbnail">
-                        <img src="../public/img/site/pet-busca-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
+                        <img src="../public/img/site/pet-busca-1.jpg" alt="Busca Pets" class="img-responsive img-circle" width="340" height="340">
                         <div class="caption">
                             <h3>Buscar Pets</h3>
                             <p>Encontre e adote um novo amigo!</p>
@@ -115,7 +115,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="thumbnail">
-                        <img src="../public/img/site/pet-cadastro-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
+                        <img src="../public/img/site/pet-cadastro-1.jpg" alt="Busca Pets" class=" img-responsive img-circle" width="340" height="340">
                         <div class="caption">
                             <h3>Cadastre um novo Pet</h3>
                             <p>Entre aqui e cadastre um pet abandonado!</p>
@@ -127,7 +127,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="thumbnail">
-                        <img src="../public/img/site/pet-denuncie-1.jpg" alt="Busca Pets" class="img-circle" style="width:340px;height:340px">
+                        <img src="../public/img/site/pet-denuncie-1.jpg" alt="Busca Pets" class="img-responsive img-circle" width="340" height="340">
                         <div class="caption">
                             <h3>Denuncie!</h3>
                             <p>Denuncie algum animal sofrendo maus tratos!</p>

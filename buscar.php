@@ -152,55 +152,57 @@
                     Encontre um Pet para adotar!
                 </div>
                 <div class="panel-body">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>Foto</th>
-                                <th>Nome</th>
-                                <th>Tipo</th>
-                                <th>Porte</th>
-                                <th>Raça</th>
-                                <th>Região</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($flag_pet_search)) { ?>
-                            <?php $pet_register_listing = $pet_register_search; ?>
-                            <?php } else { ?>
-                            <?php $pet_register_listing = $pet_register->listing(); ?>
-                            <?php } ?>
-                            <?php if (empty($pet_register_listing)) { ?>
-                            <tr>
-                                <td colspan="8">
-                                    <?php if (!empty($flag_pet_search)) { ?>
-                                    <p class="text-center">Nenhum Pet encontrado para sua consulta!</p>
-                                    <?php } else { ?>
-                                    <p class="text-center">Não há Pets cadastrados!</p>
-                                    <?php } ?>
-                                </td>
-                            </tr>
-                            <?php } ?>
-                            <?php foreach ($pet_register_listing as $key => $pet_register) { ?>
-                            <tr>
-                                <td>
-                                    <img src="<?php print $pet_register->photo[1]->path; ?>" width="50" height="50" title="<?php print $pet_register->nome; ?>" alt="<?php print $pet_register->nome; ?>"></img>
-                                </td>
-                                <td><?php print utf8_encode($pet_register->nome); ?></td>
-                                <td><?php print $pet_register->tipo_label; ?></td>
-                                <td><?php print utf8_encode($pet_register->raca); ?></td>
-                                <td><?php print $pet_register->porte_label; ?></td>
-                                <td><?php print $pet_register->city->estadosigla; ?>/<?php print utf8_encode($pet_register->city->nome); ?></td>
-                                <td>
-                                    <div class="btn-group" role="group" aria-label="...">
-                                        <a href="pets-adotar.php?id=<?php print $pet_register->id; ?>" class="btn btn-success">
-                                            <span class="glyphicon glyphicon-heart-empty"></span> Adotar!
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Foto</th>
+                                    <th>Nome</th>
+                                    <th>Tipo</th>
+                                    <th>Porte</th>
+                                    <th>Raça</th>
+                                    <th>Região</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($flag_pet_search)) { ?>
+                                <?php $pet_register_listing = $pet_register_search; ?>
+                                <?php } else { ?>
+                                <?php $pet_register_listing = $pet_register->listing(); ?>
+                                <?php } ?>
+                                <?php if (empty($pet_register_listing)) { ?>
+                                <tr>
+                                    <td colspan="8">
+                                        <?php if (!empty($flag_pet_search)) { ?>
+                                        <p class="text-center">Nenhum Pet encontrado para sua consulta!</p>
+                                        <?php } else { ?>
+                                        <p class="text-center">Não há Pets cadastrados!</p>
+                                        <?php } ?>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                                <?php foreach ($pet_register_listing as $key => $pet_register) { ?>
+                                <tr>
+                                    <td>
+                                        <img src="<?php print $pet_register->photo[1]->path; ?>" width="50" height="50" title="<?php print $pet_register->nome; ?>" alt="<?php print $pet_register->nome; ?>"></img>
+                                    </td>
+                                    <td><?php print utf8_encode($pet_register->nome); ?></td>
+                                    <td><?php print $pet_register->tipo_label; ?></td>
+                                    <td><?php print utf8_encode($pet_register->raca); ?></td>
+                                    <td><?php print $pet_register->porte_label; ?></td>
+                                    <td><?php print $pet_register->city->estadosigla; ?>/<?php print utf8_encode($pet_register->city->nome); ?></td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="...">
+                                            <a href="pets-adotar.php?id=<?php print $pet_register->id; ?>" class="btn btn-success">
+                                                <span class="glyphicon glyphicon-heart-empty"></span> Adotar!
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <footer class="col-md-12" style="margin-top:40px">
