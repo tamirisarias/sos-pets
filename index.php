@@ -45,7 +45,7 @@
                         </li>
                         <li>
                             <?php if (!empty($_SESSION['user'])) { ?>
-                            <a href="meus-pets.php"><i>Meus Pets</i></a>
+                            <a href="meus-pets.php"><i><b>Meus Pets</b></i></a>
                             <?php } else { ?>
                             <a href="cadastrar.php">Cadastrar</a>
                             <?php } ?>
@@ -103,7 +103,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="thumbnail">
-                        <img src="../public/img/site/pet-busca-1.jpg" alt="Busca Pets" class="img-responsive img-circle" width="340" height="340">
+                        <img src="../public/img/site/pet-busca-1-rdm.jpg" alt="Busca Pets" class="img-responsive img-circle" width="340" height="340">
                         <div class="caption">
                             <h3>Buscar Pets</h3>
                             <p>Encontre e adote um novo amigo!</p>
@@ -115,7 +115,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="thumbnail">
-                        <img src="../public/img/site/pet-cadastro-1.jpg" alt="Busca Pets" class="img-responsive img-circle" width="340" height="340">
+                        <img src="../public/img/site/pet-cadastro-1-rdm.jpg" alt="Busca Pets" class="img-responsive img-circle" width="340" height="340">
                         <div class="caption">
                             <h3>Cadastre um novo Pet</h3>
                             <p>Entre aqui e cadastre um pet abandonado!</p>
@@ -127,7 +127,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="thumbnail">
-                        <img src="../public/img/site/pet-denuncie-1.jpg" alt="Busca Pets" class="img-responsive img-circle" width="340" height="340">
+                        <img src="../public/img/site/pet-denuncie-1-rdm.jpg" alt="Busca Pets" class="img-responsive img-circle" width="340" height="340">
                         <div class="caption">
                             <h3>Denuncie!</h3>
                             <p>Denuncie algum animal sofrendo maus tratos!</p>

@@ -45,7 +45,7 @@
                         </li>
                         <li>
                             <?php if (!empty($_SESSION['user'])) { ?>
-                            <a href="meus-pets.php"><i>Meus Pets</i></a>
+                            <a href="meus-pets.php"><i><b>Meus Pets</b></i></a>
                             <?php } else { ?>
                             <a href="cadastrar.php">Cadastrar</a>
                             <?php } ?>
